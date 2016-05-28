@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Don't forget to set system property -DLog4jContextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector 
+	to make all loggers asynchronous. -->
+<!-- http://bitfish.eu/java/log4j-2-multiple-appenders-with-different-log-levels/ -->
+<Configuration status="trace">
+	<!-- 整体思路：AsyncLoggerDisruptor（单线程）做logEvent的消息分发，然后多个AsyncAppender做实际的文件写入操作 -->
+	<Appenders>
+
+		<Console name="STDOUT" target="SYSTEM_OUT">
+			<PatternLayout pattern="%m%n" />
+		</Console>
+		<!-- Async Loggers will auto-flush in batches, so switch off immediateFlush. -->
+		<!-- info -->
+		<File name="imfile" fileName="${sys:log4j2.netty}">
+			<PatternLayout>
+				<Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+			</PatternLayout>
+		</File>
+		<RollingFile name="ROLLING" fileName="${sys:log4j2.netty}">
+			<PatternLayout pattern="%d %p %c{1.} [%t] %m%n"/>
+			<Policies>
+				<TimeBasedTriggeringPolicy modulate="true" interval="24"/>
+			</Policies>
+		</RollingFile>
+		<Async name="asyncInfoAppender">
+			<AppenderRef ref="imfile" />
+		</Async>
+	</Appenders>
+	<Loggers>
+		<root level="info">
+			<AppenderRef ref="imfile" />
+		</root>
+	</Loggers>
+</Configuration>

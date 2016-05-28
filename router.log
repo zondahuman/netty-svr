@@ -1,0 +1,3 @@
+2016-05-28 20:10:12,187 INFO c.a.l.n.c.u.Log4j2ShutDownHook [main] file exists=log4j2.xml
+2016-05-28 20:10:37,215 INFO c.a.l.n.c.u.Log4j2ShutDownHook [main] file-exists=log4j2.xml
+2016-05-28 20:12:24,153 INFO yourProgramName [Thread-2] Shutting down - closing application
